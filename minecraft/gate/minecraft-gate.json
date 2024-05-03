@@ -5,26 +5,23 @@
     "install": [
       {
         "files": [
-          "https://github.com/minekube/gate/releases/download/${Version}/gate_${Ersion}_linux_amd64"
-        ],
-        "type": "download"
-      },
-      {
-        "files": [
-          "https://raw.githubusercontent.com/minekube/gate/${Version}/config.yml"
+          "https://raw.githubusercontent.com/dilllxd/dylanpufferpaneltemplates/main/minecraft/gate/installer"
         ],
         "type": "download"
       },
       {
         "commands": [
-          "chmod +x gate_${Ersion}_linux_amd64"
+          "chmod u+x installer",
+          "./installer version=${version} lite=${lite}",
+          "rm .wget-hsts",
+          "rm installer"
         ],
         "type": "command"
       }
     ],
     "run": {
       "stop": "stop",
-      "command": "./gate_${Ersion}_linux_amd64",
+      "command": "./gate",
       "workingDirectory": "",
       "pre": [],
       "post": [],
@@ -33,19 +30,19 @@
       }
     },
     "data": {
-      "Ersion": {
+      "version": {
         "type": "string",
-        "desc": "Version number without the v (example: 0.36.7)",
-        "display": "Ersion",
-        "required": true,
-        "value": "0.36.7"
-      },
-      "Version": {
-        "type": "string",
-        "desc": "Version number with the v (example: v0.36.7)",
+        "desc": "Keep this to either latest or change it to a version number with the v (example: v0.36.7)",
         "display": "Version",
         "required": true,
-        "value": "v0.36.7"
+        "value": "latest"
+      },   
+      "lite": {
+        "type": "boolean",
+        "desc": "Gate Lite mode",
+        "display": "Gate Lite",
+        "required": true,
+        "value": "false"
       },
       "memory": {
         "type": "integer",
