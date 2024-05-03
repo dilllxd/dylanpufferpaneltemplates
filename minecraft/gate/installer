@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Parse command-line arguments
+for arg in "$@"; do
+    case "$arg" in
+        version=*) GATE_VERSION="${arg#*=}" ;;
+        lite=*) GATE_LITE="${arg#*=}" ;;
+        *) ;;
+    esac
+done
+
+echo -e "\e[1;32mDebug: Version ${GATE_VERSION} is selected. Gate Lite is ${GATE_LITE}\e[0m"
+
+# Check if GATE_VERSION is provided and available on GitHub
+if [ -z "${GATE_VERSION}" ] || [ "${GATE_VERSION}" == "latest" ]; then
+    GATE_VERSION=$(curl -s https://api.github.com/repos/minekube/gate/releases/latest | jq -r .tag_name)
+    echo -e "\e[1;36mGate Version selected is ${GATE_VERSION}\e[0m"
+else
+    # Attempt to download the provided version
+    DOWNLOAD_URL="https://github.com/minekube/gate/releases/download/${GATE_VERSION}/gate_${GATE_VERSION#v}_linux_amd64"
+    if wget -O /dev/null -q --spider "${DOWNLOAD_URL}"; then
+        echo -e "\e[1;32mDebug: Version ${GATE_VERSION} is available.\e[0m"
+    else
+        echo -e "\e[1;31mProvided GATE_VERSION (${GATE_VERSION}) is not available. Defaulting to latest.\e[0m"
+        GATE_VERSION=$(curl -s https://api.github.com/repos/minekube/gate/releases/latest | jq -r .tag_name)
+        echo -e "\e[1;36mGate Version selected is ${GATE_VERSION}\e[0m"
+    fi
+fi
+
+# Determine if using Standard or Lite
+if [ "${GATE_LITE}" == "true" ]; then
+    # Check if Lite version is available for the provided version
+    LITE_CONFIG_URL="https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/config-lite.yml"
+    if wget -O /dev/null -q --spider "${LITE_CONFIG_URL}"; then
+        CONFIG_FILE="config-lite.yml"
+        echo -e "\e[1;32mDebug: Lite version configuration is available.\e[0m"
+    else
+        CONFIG_FILE="config.yml"
+        echo -e "\e[1;31mDebug: Lite version configuration is not available. Using regular configuration.\e[0m"
+    fi
+else
+    CONFIG_FILE="config.yml"
+fi
+
+# Download the selected version release
+echo -e "\e[1;33mDownloading gate from https://github.com/minekube/gate/releases/download/${GATE_VERSION}/gate_${GATE_VERSION#v}_linux_amd64\e[0m"
+if wget -O gate "https://github.com/minekube/gate/releases/download/${GATE_VERSION}/gate_${GATE_VERSION#v}_linux_amd64" > /dev/null 2>&1; then
+    echo -e "\e[1;32mDownload successful\e[0m"
+else
+    echo -e "\e[1;31mDownload failed\e[0m"
+fi
+
+# Download the config from the selected version branch
+echo -e "\e[1;33mDownloading gate config from https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/${CONFIG_FILE}\e[0m"
+if wget -O config.yml "https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/${CONFIG_FILE}" > /dev/null 2>&1; then
+    echo -e "\e[1;32mDownload successful\e[0m"
+else
+    echo -e "\e[1;31mDownload failed\e[0m"
+fi
+
+# Make the downloaded file executable
+chmod +x "gate"
