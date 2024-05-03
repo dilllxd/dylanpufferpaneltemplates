@@ -35,6 +35,7 @@ fi
 if [ -z "${GATE_LITE}" ] || [ "${GATE_LITE}" == "false" ]; then
     # Check if Lite version is available for the provided version
     LITE_CONFIG_URL="https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/config-lite.yml"
+    echo -e "\e[1;35mDebug: Lite config URL: ${LITE_CONFIG_URL}\e[0m"
     if wget -O /dev/null -q --spider "${LITE_CONFIG_URL}"; then
         CONFIG_FILE="config-lite.yml"
         echo -e "\e[1;32mDebug: Lite version configuration is available.\e[0m"
