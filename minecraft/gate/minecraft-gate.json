@@ -1,0 +1,70 @@
+{
+    "name": "Gate",
+    "display": "Gate - Minecraft",
+    "type": "minecraft-java",
+    "install": [
+      {
+        "files": [
+          "https://github.com/minekube/gate/releases/download/${Version}/gate_${Ersion}_linux_amd64"
+        ],
+        "type": "download"
+      },
+      {
+        "files": [
+          "https://raw.githubusercontent.com/minekube/gate/${Version}/config.yml"
+        ],
+        "type": "download"
+      },
+      {
+        "commands": [
+          "chmod +x gate_${Ersion}_linux_amd64"
+        ],
+        "type": "command"
+      }
+    ],
+    "run": {
+      "stop": "stop",
+      "command": "./gate_${Ersion}_linux_amd64",
+      "workingDirectory": "",
+      "pre": [],
+      "post": [],
+      "environmentVars": {
+        "LD_LIBRARY_PATH": "."
+      }
+    },
+    "data": {
+      "Ersion": {
+        "type": "string",
+        "desc": "Version number without the v (example: 0.36.7)",
+        "display": "Ersion",
+        "required": true,
+        "value": "0.36.7"
+      },
+      "Version": {
+        "type": "string",
+        "desc": "Version number with the v (example: v0.36.7)",
+        "display": "Version",
+        "required": true,
+        "value": "v0.36.7"
+      },
+      "memory": {
+        "type": "integer",
+        "desc": "How much memory in MB to allocate to the Gate server. It is generally recommended to allocated 512MB RAM for every 500 players. Please keep in mind that additional plugins may impact the amount needed in your case.",
+        "display": "Memory (MB)",
+        "required": true,
+        "value": "512"
+      }
+    },
+    "environment": {
+      "type": "standard"
+    },
+    "supportedEnvironments": [
+      {
+        "type": "standard"
+      }
+    ],
+    "requirements": {
+      "os": "linux",
+      "arch": "amd64"
+    }
+  }
