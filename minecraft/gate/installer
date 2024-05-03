@@ -9,10 +9,11 @@ for arg in "$@"; do
     esac
 done
 
+echo -e "\e[1;32mDebug: Version ${GATE_VERSION} is selected. Gate Lite is ${GATE_LITE}\e[0m"
+
 echo -e "\e[1;33mUpdating and installing requirements...\e[0m"
 apt update && apt -y --no-install-recommends install ca-certificates wget curl jq
 apt -q clean all
-clear
 
 # Check if GATE_VERSION is provided and available on GitHub
 if [ -z "${GATE_VERSION}" ] || [ "${GATE_VERSION}" == "latest" ]; then
