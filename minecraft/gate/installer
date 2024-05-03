@@ -12,8 +12,8 @@ done
 echo -e "\e[1;32mDebug: Version ${GATE_VERSION} is selected. Gate Lite is ${GATE_LITE}\e[0m"
 
 echo -e "\e[1;33mUpdating and installing requirements...\e[0m"
-apt update && apt -y --no-install-recommends install ca-certificates wget curl jq
-apt -q clean all
+apt update && apt -y --no-install-recommends install ca-certificates wget curl jq > /dev/null 2>&1
+apt -q clean all > /dev/null 2>&1
 
 # Check if GATE_VERSION is provided and available on GitHub
 if [ -z "${GATE_VERSION}" ] || [ "${GATE_VERSION}" == "latest" ]; then
@@ -48,11 +48,11 @@ fi
 
 # Download the selected version release
 echo -e "\e[1;33mDownloading gate from https://github.com/minekube/gate/releases/download/${GATE_VERSION}/gate_${GATE_VERSION#v}_linux_amd64\e[0m"
-wget -O gate "https://github.com/minekube/gate/releases/download/${GATE_VERSION}/gate_${GATE_VERSION#v}_linux_amd64"
+wget -O gate "https://github.com/minekube/gate/releases/download/${GATE_VERSION}/gate_${GATE_VERSION#v}_linux_amd64" > /dev/null 2>&1
 
 # Download the config from the selected version branch
 echo -e "\e[1;33mDownloading gate config from https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/${CONFIG_FILE}\e[0m"
-wget -O config.yml "https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/${CONFIG_FILE}"
+wget -O config.yml "https://raw.githubusercontent.com/minekube/gate/${GATE_VERSION}/${CONFIG_FILE}" > /dev/null 2>&1
 
 # Make the downloaded file executable
 chmod +x "gate"
