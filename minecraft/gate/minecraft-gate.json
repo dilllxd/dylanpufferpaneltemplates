@@ -20,7 +20,7 @@
       }
     ],
     "run": {
-      "stop": "stop",
+      "stopCode": 2,
       "command": "./gate",
       "workingDirectory": "",
       "pre": [],
